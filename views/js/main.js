@@ -398,7 +398,7 @@ var pizzaElementGenerator = function(i) {
 // 当网站中"Our Pizzas"的滑窗部分移动时调用resizePizzas(size)函数
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API 函数
-  var pizzaSize = document.querySelector("#pizzaSize");
+  var pizzaSize = document.getElementById("pizzaSize");
   // 改变滑窗前披萨的尺寸值
   function changeSliderLabel(size) {
     switch(size) {
@@ -436,7 +436,7 @@ var resizePizzas = function(size) {
         console.log("bug in sizeSwitcher");
     }
     var randomPizza = document.querySelectorAll(".randomPizzaContainer");
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    for (var i = 0; i < randomPizza.length; i++) {
       randomPizza[i].style.width = newwidth+"%";
     }
   }
@@ -486,7 +486,7 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('.mover');
   var iL = items.length;
   var st = document.body.scrollTop;
   for (var i = 0; i < iL; i++) {
@@ -505,15 +505,20 @@ function updatePositions() {
 }
 
 // 在页面滚动时运行updatePositions函数
-window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', requestUpdate);
+function requestUpdate() {
+  requestAnimationFrame(updatePositions);
+}
 
 // 当页面加载时生成披萨滑窗
-var movingPizzas1 = document.querySelector("#movingPizzas1");
+var movingPizzas1 = document.getElementById("movingPizzas1");
+var winHeight = document.body.clientHeight;
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  var num = winHeight/s * cols;
   
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < num; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
