@@ -27,10 +27,26 @@ gulp.task('testHtmlmin', function () {
         minifyJS: true,//压缩页面JS
         minifyCSS: true//压缩页面CSS
     };
-    gulp.src('index.html')
+    gulp.src('*.html')
         .pipe(htmlmin(options))
         .pipe(gulp.dest('dist'));
 });
+gulp.task('testHtmlmin1', function () {
+    var options = {
+        removeComments: true,//清除HTML注释
+        collapseWhitespace: true,//压缩HTML
+        collapseBooleanAttributes: true,//省略布尔属性的值 <input checked="true"/> ==> <input />
+        removeEmptyAttributes: true,//删除所有空格作属性值 <input id="" /> ==> <input />
+        removeScriptTypeAttributes: true,//删除<script>的type="text/javascript"
+        removeStyleLinkTypeAttributes: true,//删除<style>和<link>的type="text/css"
+        minifyJS: true,//压缩页面JS
+        minifyCSS: true//压缩页面CSS
+    };
+    gulp.src('views/*.html')
+        .pipe(htmlmin(options))
+        .pipe(gulp.dest('dist/views'));
+});
+
 
 /*gulp.task('images', function() {
 return gulp.src(['img/*','views/images/*'])
@@ -44,12 +60,25 @@ gulp.task('minifycss', function() {
         .pipe(minifycss())   //执行压缩
         .pipe(gulp.dest('dist/css'));  //输出文件夹
 });
+gulp.task('viewscss', function() {
+    return gulp.src('views/css/*.css')      //压缩的文件
+        .pipe(minifycss())   //执行压缩
+        .pipe(gulp.dest('dist/views/css'));  //输出文件夹
+});
 gulp.task('minifyjs', function() {
     return gulp.src('js/*.js')
-        .pipe(concat('main.js'))    //合并所有js到main.js
-        .pipe(gulp.dest('dist/js'))    //输出main.js到文件夹
-        .pipe(rename({suffix: '.min'}))   //rename压缩后的文件名
+/*        .pipe(gulp.dest('dist/js'))    //输出main.js到文件夹
+        .pipe(rename({suffix: '.min'}))   //rename压缩后的文件名*/
         .pipe(uglify())    //压缩
         .pipe(gulp.dest('dist/js'));  //输出
 });
-gulp.task('default',['testLess','minifycss','minifyjs','testHtmlmin']); 
+
+gulp.task('viewsminifyjs', function() {
+    return gulp.src('views/js/*.js')/*
+        .pipe(concat('main.js'))    //合并所有js到main.js
+        .pipe(gulp.dest('dist/views/js'))    //输出main.js到文件夹
+        .pipe(rename({suffix: '.min'}))   //rename压缩后的文件名*/
+        .pipe(uglify())    //压缩
+        .pipe(gulp.dest('dist/views/js'));  //输出
+});
+gulp.task('default',['minifycss','viewscss','minifyjs','viewsminifyjs','testHtmlmin','testHtmlmin1']); 
