@@ -6,9 +6,10 @@ var gulp = require('gulp'), //本地安装gulp所用到的地方
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     htmlmin = require('gulp-htmlmin'),
-    notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    imagemin = require('gulp-imagemin');
+    notify = require('gulp-notify');
+    // cache = require('gulp-cache'),
+/*    imagemin = require('gulp-imagemin'),
+    pngquant = require('imagemin-pngquant');*/
 //定义一个testLess任务（自定义任务名称）
 gulp.task('testLess', function () {
     gulp.src('src/less/index.less') //该任务针对的文件
@@ -31,12 +32,13 @@ gulp.task('testHtmlmin', function () {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('images', function() {
+/*gulp.task('images', function() {
 return gulp.src(['img/*','views/images/*'])
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+    .pipe(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true,multipass: true,svgoPlugins: [{removeViewBox: false}],
+            use: [pngquant()] }))
     .pipe(gulp.dest('dist/img'))
     .pipe(notify({ message: 'Images task complete' }));
-});
+});*/
 gulp.task('minifycss', function() {
     return gulp.src('css/*.css')      //压缩的文件
         .pipe(minifycss())   //执行压缩
@@ -50,4 +52,4 @@ gulp.task('minifyjs', function() {
         .pipe(uglify())    //压缩
         .pipe(gulp.dest('dist/js'));  //输出
 });
-gulp.task('default',['testLess','images','minifycss','minifyjs','testHtmlmin']); 
+gulp.task('default',['testLess','minifycss','minifyjs','testHtmlmin']); 
